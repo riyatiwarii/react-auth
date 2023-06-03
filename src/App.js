@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+  import Home from './pages/home';
+  import SignUp from './pages/signup';
+  import './App.css';
+  import { Outlet, createBrowserRouter } from "react-router-dom"
+  import SignIn from './pages/signin';
+  import Header from './pages/header';
+  import HeroSection from './pages/herosection';
+  import { Provider } from 'react-redux';
+  import store from './redux/store';
+  import ProtectedRoute from "./utils/protectedroute";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  function App() {
+    return (
+      <Provider store={store}>
+      <Header/>
+      <Outlet/>
+      </Provider>
+    );
+  }
 
-export default App;
+  const appRouter = createBrowserRouter([
+    {
+      path: "/",
+      element: <App/>,
+      children: [
+        {
+          path: "/",
+          element: <HeroSection/>
+        },  
+        {
+          path: "/signin",
+          element: <SignIn/>
+        },
+        {
+          path: "/signup",
+          element: <SignUp/>
+        },
+        {
+          path: "/home",
+          element: <ProtectedRoute element={<Home/>} />,
+        },
+      ]
+    },
+  ])
+
+  export default appRouter;
